@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teste de Envio de E-mail</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      #result {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 4px;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Teste de Envio de E-mail</h1>
+    <form id="emailForm">
+      <div class="form-group">
+        <label for="to">Destinatário:</label>
+        <input type="email" id="to" name="to" required />
+      </div>
+      <div class="form-group">
+        <label for="subject">Assunto:</label>
+        <input type="text" id="subject" name="subject" required />
+      </div>
+      <div class="form-group">
+        <label for="message">Mensagem:</label>
+        <textarea id="message" name="message" rows="6" required></textarea>
+      </div>
+      <button type="submit">Enviar E-mail</button>
+    </form>
+
+    <div id="result" style="display: none"></div>
+
+    <script>
+      document
+        .getElementById("emailForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const to = document.getElementById("to").value;
+          const subject = document.getElementById("subject").value;
+          const message = document.getElementById("message").value;
+
+          const resultDiv = document.getElementById("result");
+          resultDiv.className = "";
+          resultDiv.style.display = "none";
+
+          try {
+            const response = await fetch("/api/send-email", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                to,
+                subject,
+                html: message,
+              }),
+            });
+
+            const data = await response.json();
+
+            resultDiv.style.display = "block";
+
+            if (data.success) {
+              resultDiv.className = "success";
+              resultDiv.innerHTML = `<strong>Sucesso!</strong> E-mail enviado com ID: ${data.messageId}`;
+              document.getElementById("emailForm").reset();
+            } else {
+              resultDiv.className = "error";
+              resultDiv.innerHTML = `<strong>Erro!</strong> ${data.message}`;
+            }
+          } catch (error) {
+            resultDiv.style.display = "block";
+            resultDiv.className = "error";
+            resultDiv.innerHTML = `<strong>Erro!</strong> Não foi possível conectar ao servidor.`;
+            console.error("Erro:", error);
+          }
+        });
+    </script>
+  </body>
+</html>
