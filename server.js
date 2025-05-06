@@ -7,11 +7,11 @@ const PORT = process.env.PORT || 8080;
 
 // Configurações SMTP (usando variáveis de ambiente ou valores padrão)
 const SMTP_CONFIG = {
-  EMAIL_FROM: process.env.EMAIL_FROM || "comercial@checkoutinho.com",
-  EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME || "Checkoutinho",
+  EMAIL_FROM: process.env.EMAIL_FROM || "viva-sorte@checkout-final.shop",
+  EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME || "Viva Sorte",
   SMTP_HOST: process.env.SMTP_HOST || "smtp.hostinger.com",
-  SMTP_USER: process.env.SMTP_USER || "comercial@checkoutinho.com",
-  SMTP_PASS: process.env.SMTP_PASS || "!Aqy7zeV313r",
+  SMTP_USER: process.env.SMTP_USER || "viva-sorte@checkout-final.shop",
+  SMTP_PASS: process.env.SMTP_PASS || "Senhasegura12345@",
   SMTP_PORT: parseInt(process.env.SMTP_PORT || "465"),
 };
 
